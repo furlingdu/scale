@@ -1,726 +1,838 @@
-<html lang="zh-CN"><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>龙性恋指数计算器</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#a8d1ff',
-                        secondary: '#6ba5d7',
-                        accent: '#3d85c6',
-                        light: '#f0f7ff',
-                        dark: '#1c4587'
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                    },
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#a8d1ff",
+              secondary: "#6ba5d7",
+              accent: "#3d85c6",
+              light: "#f0f7ff",
+              dark: "#1c4587",
+            },
+            fontFamily: {
+              sans: ["Inter", "system-ui", "sans-serif"],
+            },
+          },
+        },
+      };
     </script>
     <style type="text/tailwindcss">
-        @layer utilities {
-            .content-auto {
-                content-visibility: auto;
-            }
-            .card-shadow {
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
-            }
-            .progress-animation {
-                transition: width 0.5s ease-in-out;
-            }
-            .fade-in {
-                animation: fadeIn 0.5s ease-in-out;
-            }
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(10px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
+      @layer utilities {
+        .content-auto {
+          content-visibility: auto;
         }
+        .card-shadow {
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05),
+            0 4px 6px -2px rgba(0, 0, 0, 0.03);
+        }
+        .progress-animation {
+          transition: width 0.5s ease-in-out;
+        }
+        .fade-in {
+          animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      }
     </style>
-</head>
-<body class="bg-light min-h-screen font-sans text-gray-800">
+  </head>
+  <body class="bg-light min-h-screen font-sans text-gray-800">
     <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-xl md:text-2xl font-bold text-accent">
-                <i class="fa fa-dragon mr-2" aria-hidden="true"></i>龙性恋指数计算器
-            </h1>
-            <div id="progress-container" class="hidden md:block w-1/2 bg-gray-200 rounded-full h-2.5">
-                <div id="progress-bar" class="bg-accent h-2.5 rounded-full progress-animation" style="width: 0%"></div>
-            </div>
+      <div
+        class="container mx-auto px-4 py-4 flex justify-between items-center"
+      >
+        <h1 class="text-xl md:text-2xl font-bold text-accent">
+          <i class="fa fa-dragon mr-2" aria-hidden="true"></i>龙性恋指数计算器
+        </h1>
+        <div
+          id="progress-container"
+          class="hidden md:block w-1/2 bg-gray-200 rounded-full h-2.5"
+        >
+          <div
+            id="progress-bar"
+            class="bg-accent h-2.5 rounded-full progress-animation"
+            style="width: 0%"
+          ></div>
         </div>
+      </div>
     </header>
 
     <main class="container mx-auto px-4 py-8">
-        <section id="intro" class="max-w-3xl mx-auto bg-white rounded-xl p-6 md:p-8 card-shadow mb-8 fade-in">
-            <h2 class="text-2xl font-bold text-dark mb-4">龙性恋指数计算器</h2>
-            
-            <div class="mb-6">
-                <h3 class="text-lg font-semibold text-accent mb-2">简介</h3>
-                <p class="text-gray-700 leading-relaxed">
-                    "龙性恋"在本表定义为：对二次元拟兽化/拟龙化（anthropomorphic dragon/dragon-fur/dragon-furry）文化、角色、形象与相关创作、收藏、情感想象等方面表现出持续的偏好、兴趣或认同。本量表用于自我评估你对"龙/拟龙"元素的兴趣强度与生活化程度——仅供自我了解与研究参考，不作为诊断结论。
-                </p>
-            </div>
-            
-            <div class="mb-6">
-                <h3 class="text-lg font-semibold text-accent mb-2">使用说明（必读）</h3>
-                <ul class="list-disc pl-5 text-gray-700 space-y-1">
-                    <li>本问卷共 <strong>50 题</strong>，耗时约 10–20 分钟。请按你在过去 12 个月中的真实感受/行为作答。</li>
-                    <li>回答分两类：<strong>同意度量表</strong>（"非常不同意" → "非常同意"）与<strong>频率量表</strong>（"从不" → "总是"）。每题题目前会标注使用哪一种量表。</li>
-                    <li>本表为自评量表，若你希望用于研究或公开发布，请注明并征得被试同意。</li>
-                    <li>本表仅供娱乐，不涉及任何医疗诊断或治疗建议。如有心理健康方面的困扰，请咨询专业人士。</li>
-                </ul>
-            </div>
-            
-            <button id="start-btn" class="w-full bg-accent hover:bg-dark text-white font-semibold py-3 px-6 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50">
-                开始测试
+      <section
+        id="intro"
+        class="max-w-3xl mx-auto bg-white rounded-xl p-6 md:p-8 card-shadow mb-8 fade-in"
+      >
+        <h2 class="text-2xl font-bold text-dark mb-4">龙性恋指数计算器</h2>
+
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold text-accent mb-2">简介</h3>
+          <p class="text-gray-700 leading-relaxed">
+            "龙性恋"在本表定义为：对二次元拟兽化/拟龙化（anthropomorphic
+            dragon/dragon-fur/dragon-furry）文化、角色、形象与相关创作、收藏、情感想象等方面表现出持续的偏好、兴趣或认同。本量表用于自我评估你对"龙/拟龙"元素的兴趣强度与生活化程度——仅供自我了解与研究参考，不作为诊断结论。
+          </p>
+        </div>
+
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold text-accent mb-2">
+            使用说明（必读）
+          </h3>
+          <ul class="list-disc pl-5 text-gray-700 space-y-1">
+            <li>
+              本问卷共 <strong>50 题</strong>，耗时约 10–20 分钟。请按你在过去
+              12 个月中的真实感受/行为作答。
+            </li>
+            <li>
+              回答分两类：<strong>同意度量表</strong>（"非常不同意" →
+              "非常同意"）与<strong>频率量表</strong>（"从不" →
+              "总是"）。每题题目前会标注使用哪一种量表。
+            </li>
+            <li>
+              本表为自评量表，若你希望用于研究或公开发布，请注明并征得被试同意。
+            </li>
+            <li>
+              本表仅供娱乐，不涉及任何医疗诊断或治疗建议。如有心理健康方面的困扰，请咨询专业人士。
+            </li>
+          </ul>
+        </div>
+
+        <button
+          id="start-btn"
+          class="w-full bg-accent hover:bg-dark text-white font-semibold py-3 px-6 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50"
+        >
+          开始测试
+        </button>
+      </section>
+
+      <section id="questions" class="max-w-3xl mx-auto hidden">
+        <div class="bg-white rounded-xl p-6 md:p-8 card-shadow mb-6 fade-in">
+          <div class="flex justify-between items-center mb-4">
+            <span id="question-number" class="text-sm font-medium text-gray-500"
+              >第 1/50 题</span
+            >
+            <span
+              id="question-type"
+              class="text-sm font-medium bg-primary/30 text-accent px-3 py-1 rounded-full"
+            ></span>
+          </div>
+
+          <h3
+            id="question-text"
+            class="text-xl font-semibold mb-6 text-gray-800"
+          ></h3>
+
+          <div id="options" class="space-y-3 mb-6"></div>
+
+          <div class="flex justify-between">
+            <button
+              id="prev-btn"
+              class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-6 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"
+              disabled
+            >
+              <i class="fa fa-arrow-left mr-1"></i> 上一题
             </button>
-        </section>
+            <button
+              id="next-btn"
+              class="bg-accent hover:bg-dark text-white font-semibold py-2 px-6 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50"
+            >
+              下一题 <i class="fa fa-arrow-right ml-1"></i>
+            </button>
+          </div>
+        </div>
 
-        <section id="questions" class="max-w-3xl mx-auto hidden">
-            <div class="bg-white rounded-xl p-6 md:p-8 card-shadow mb-6 fade-in">
-                <div class="flex justify-between items-center mb-4">
-                    <span id="question-number" class="text-sm font-medium text-gray-500">第 1/50 题</span>
-                    <span id="question-type" class="text-sm font-medium bg-primary/30 text-accent px-3 py-1 rounded-full"></span>
-                </div>
-                
-                <h3 id="question-text" class="text-xl font-semibold mb-6 text-gray-800"></h3>
-                
-                <div id="options" class="space-y-3 mb-6">
-                </div>
-                
-                <div class="flex justify-between">
-                    <button id="prev-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-2 px-6 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50" disabled>
-                        <i class="fa fa-arrow-left mr-1"></i> 上一题
-                    </button>
-                    <button id="next-btn" class="bg-accent hover:bg-dark text-white font-semibold py-2 px-6 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50">
-                        下一题 <i class="fa fa-arrow-right ml-1"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <div class="md:hidden bg-white rounded-xl p-4 card-shadow">
-                <div class="text-sm text-gray-500 mb-2">进度</div>
-                <div class="bg-gray-200 rounded-full h-2.5">
-                    <div id="mobile-progress-bar" class="bg-accent h-2.5 rounded-full progress-animation" style="width: 0%"></div>
-                </div>
-            </div>
-        </section>
+        <div class="md:hidden bg-white rounded-xl p-4 card-shadow">
+          <div class="text-sm text-gray-500 mb-2">进度</div>
+          <div class="bg-gray-200 rounded-full h-2.5">
+            <div
+              id="mobile-progress-bar"
+              class="bg-accent h-2.5 rounded-full progress-animation"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+      </section>
 
-        <section id="results" class="max-w-3xl mx-auto hidden">
-            <div class="bg-white rounded-xl p-6 md:p-8 card-shadow mb-8 fade-in">
-                                <div class="border-t border-gray-200 pt-6 mt-6">
-                    <div class="flex items-center p-4 bg-primary/5 rounded-lg">
-                        <img src="https://furlingdu.com/usr/res/avatar.png" alt="作者头像" class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-white shadow-sm">
-                        <div class="flex-1">
-                            <h3 class="font-semibold text-gray-800">BY @澪度</h3>
-                            <p class="text-gray-600 text-sm mt-1">如果你觉得这个量表有趣 欢迎扩列一下我！<br>QQ:3648192311</p>
-                            <a href="https://qm.qq.com/q/lN3Km6Znc6" target="_blank" class="inline-flex items-center text-accent hover:text-dark text-sm mt-2 font-medium">
-                                <i class="fa fa-link mr-1"></i> 戳我扩列
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <h2 class="text-2xl font-bold text-dark mb-6 text-center">你的龙性恋指数结果</h2>
-                
-                <div class="flex flex-col items-center mb-8">
-                    <div class="text-5xl font-bold text-accent mb-2" id="final-score">0</div>
-                    <div class="text-xl font-medium text-gray-600" id="score-category"></div>
-                </div>
-                
-                <div class="mb-6 p-4 bg-primary/10 rounded-lg border border-primary/30">
-                    <h3 class="text-lg font-semibold text-accent mb-2">结果解读</h3>
-                    <p class="text-gray-700" id="score-interpretation"></p>
-                </div>
-                
-                <div class="mb-6">
-                    <h3 class="text-lg font-semibold text-accent mb-3">各维度得分</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex justify-between mb-1">
-                                <span class="text-sm font-medium">创作与表达</span>
-                                <span class="text-sm" id="creation-score">0/100</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div id="creation-bar" class="bg-accent h-2 rounded-full" style="width: 0%"></div>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <div class="flex justify-between mb-1">
-                                <span class="text-sm font-medium">社交与社区参与</span>
-                                <span class="text-sm" id="social-score">0/100</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div id="social-bar" class="bg-accent h-2 rounded-full" style="width: 0%"></div>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <div class="flex justify-between mb-1">
-                                <span class="text-sm font-medium">认同与幻想</span>
-                                <span class="text-sm" id="identity-score">0/100</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div id="identity-bar" class="bg-accent h-2 rounded-full" style="width: 0%"></div>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <div class="flex justify-between mb-1">
-                                <span class="text-sm font-medium">收藏与消费</span>
-                                <span class="text-sm" id="collection-score">0/100</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div id="collection-bar" class="bg-accent h-2 rounded-full" style="width: 0%"></div>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <div class="flex justify-between mb-1">
-                                <span class="text-sm font-medium">日常生活</span>
-                                <span class="text-sm" id="daily-score">0/100</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div id="daily-bar" class="bg-accent h-2 rounded-full" style="width: 0%"></div>
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <div class="flex justify-between mb-1">
-                                <span class="text-sm font-medium">情感与亲密</span>
-                                <span class="text-sm" id="emotion-score">0/100</span>
-                            </div>
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div id="emotion-bar" class="bg-accent h-2 rounded-full" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-
-                
-                <button id="restart-btn" class="w-full mt-8 bg-secondary hover:bg-accent text-white font-semibold py-3 px-6 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50">
-                    重新测试
-                </button>
+      <section id="results" class="max-w-3xl mx-auto hidden">
+        <div class="bg-white rounded-xl p-6 md:p-8 card-shadow mb-8 fade-in">
+          <div class="border-t border-gray-200 pt-6 mt-6">
+            <div class="flex items-center p-4 bg-primary/5 rounded-lg">
+              <img
+                src="https://furlingdu.com/usr/res/avatar.png"
+                alt="作者头像"
+                class="w-16 h-16 rounded-full object-cover mr-4 border-2 border-white shadow-sm flex-shrink-0"
+              />
+              <div class="flex-1 min-w-0">
+                <h3 class="font-semibold text-gray-800 truncate">BY @澪度</h3>
+                <p class="text-gray-600 text-sm mt-1">
+                  如果你觉得这个量表有趣 欢迎扩列一下我！<br />QQ:3648192311
+                </p>
+                <a
+                  href="https://qm.qq.com/q/lN3Km6Znc6"
+                  target="_blank"
+                  class="inline-flex items-center text-accent hover:text-dark text-sm mt-2 font-medium"
+                >
+                  <i class="fa fa-link mr-1"></i> 戳我扩列
+                </a>
+              </div>
             </div>
-        </section>
+          </div>
+          <h2 class="text-2xl font-bold text-dark mb-6 text-center">
+            你的龙性恋指数结果
+          </h2>
+
+          <div class="flex flex-col items-center mb-8">
+            <div class="text-5xl font-bold text-accent mb-2" id="final-score">
+              0
+            </div>
+            <div
+              class="text-xl font-medium text-gray-600"
+              id="score-category"
+            ></div>
+          </div>
+
+          <div
+            class="mb-6 p-4 bg-primary/10 rounded-lg border border-primary/30"
+          >
+            <h3 class="text-lg font-semibold text-accent mb-2">结果解读</h3>
+            <p class="text-gray-700" id="score-interpretation"></p>
+          </div>
+
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold text-accent mb-3">各维度得分</h3>
+            <div class="space-y-4">
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium">创作与表达</span>
+                  <span class="text-sm" id="creation-score">0/100</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    id="creation-bar"
+                    class="bg-accent h-2 rounded-full"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium">社交与社区参与</span>
+                  <span class="text-sm" id="social-score">0/100</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    id="social-bar"
+                    class="bg-accent h-2 rounded-full"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium">认同与幻想</span>
+                  <span class="text-sm" id="identity-score">0/100</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    id="identity-bar"
+                    class="bg-accent h-2 rounded-full"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium">收藏与消费</span>
+                  <span class="text-sm" id="collection-score">0/100</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    id="collection-bar"
+                    class="bg-accent h-2 rounded-full"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium">日常生活</span>
+                  <span class="text-sm" id="daily-score">0/100</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    id="daily-bar"
+                    class="bg-accent h-2 rounded-full"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+
+              <div>
+                <div class="flex justify-between mb-1">
+                  <span class="text-sm font-medium">情感与亲密</span>
+                  <span class="text-sm" id="emotion-score">0/100</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    id="emotion-bar"
+                    class="bg-accent h-2 rounded-full"
+                    style="width: 0%"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button
+            id="restart-btn"
+            class="w-full mt-8 bg-secondary hover:bg-accent text-white font-semibold py-3 px-6 rounded-lg transition duration-300 focus:outline-none focus:ring-2 focus:ring-secondary focus:ring-opacity-50"
+          >
+            重新测试
+          </button>
+        </div>
+      </section>
     </main>
 
-
     <script>
-        const questions = [
-            {
-                id: 1,
-                text: "我喜欢创作以龙或拟龙角色为主的设定、剧情或人物档案。",
-                type: "同意度",
-                dimension: "creation",
-                reverse: false
-            },
-            {
-                id: 2,
-                text: "我经常为我的原创角色设计龙类细节（鳞片、翅膀、角、尾巴等）。",
-                type: "同意度",
-                dimension: "creation",
-                reverse: false
-            },
-            {
-                id: 3,
-                text: "我在创作时优先考虑“龙”元素，而不是人类或其他拟兽类。",
-                type: "同意度",
-                dimension: "creation",
-                reverse: false
-            },
-            {
-                id: 4,
-                text: "我喜欢将其他角色“拟龙化”（把非龙角色改造成龙形态）。",
-                type: "同意度",
-                dimension: "creation",
-                reverse: false
-            },
-            {
-                id: 5,
-                text: "我会专门为龙角色设计专属配色、纹样或文化体系。",
-                type: "同意度",
-                dimension: "creation",
-                reverse: false
-            },
-            {
-                id: 6,
-                text: "我在社交媒体或个人主页上突出展示我的龙原创作品。",
-                type: "同意度",
-                dimension: "creation",
-                reverse: false
-            },
-            {
-                id: 7,
-                text: "我愿意投入大量时间去打磨龙类设定细节（解剖、习性、语言等）。",
-                type: "同意度",
-                dimension: "creation",
-                reverse: false
-            },
-            {
-                id: 8,
-                text: "我认为龙类角色比非龙类角色更能代表我的审美/表达。",
-                type: "同意度",
-                dimension: "creation",
-                reverse: false
-            },
-            {
-                id: 9,
-                text: "我更愿意参加以龙主题为核心的创作活动或征稿。",
-                type: "同意度",
-                dimension: "creation",
-                reverse: false
-            },
-            {
-                id: 10,
-                text: "我会因为别人的龙设定而改变或调整自己的创作方向。",
-                type: "同意度",
-                dimension: "creation",
-                reverse: false
-            },
+      const questions = [
+        {
+          id: 1,
+          text: "我喜欢创作以龙或拟龙角色为主的设定、剧情或人物档案。",
+          type: "同意度",
+          dimension: "creation",
+          reverse: false,
+        },
+        {
+          id: 2,
+          text: "我经常为我的原创角色设计龙类细节（鳞片、翅膀、角、尾巴等）。",
+          type: "同意度",
+          dimension: "creation",
+          reverse: false,
+        },
+        {
+          id: 3,
+          text: "我在创作时优先考虑“龙”元素，而不是人类或其他拟兽类。",
+          type: "同意度",
+          dimension: "creation",
+          reverse: false,
+        },
+        {
+          id: 4,
+          text: "我喜欢将其他角色“拟龙化”（把非龙角色改造成龙形态）。",
+          type: "同意度",
+          dimension: "creation",
+          reverse: false,
+        },
+        {
+          id: 5,
+          text: "我会专门为龙角色设计专属配色、纹样或文化体系。",
+          type: "同意度",
+          dimension: "creation",
+          reverse: false,
+        },
+        {
+          id: 6,
+          text: "我在社交媒体或个人主页上突出展示我的龙原创作品。",
+          type: "同意度",
+          dimension: "creation",
+          reverse: false,
+        },
+        {
+          id: 7,
+          text: "我愿意投入大量时间去打磨龙类设定细节（解剖、习性、语言等）。",
+          type: "同意度",
+          dimension: "creation",
+          reverse: false,
+        },
+        {
+          id: 8,
+          text: "我认为龙类角色比非龙类角色更能代表我的审美/表达。",
+          type: "同意度",
+          dimension: "creation",
+          reverse: false,
+        },
+        {
+          id: 9,
+          text: "我更愿意参加以龙主题为核心的创作活动或征稿。",
+          type: "同意度",
+          dimension: "creation",
+          reverse: false,
+        },
+        {
+          id: 10,
+          text: "我会因为别人的龙设定而改变或调整自己的创作方向。",
+          type: "同意度",
+          dimension: "creation",
+          reverse: false,
+        },
 
-            {
-                id: 11,
-                text: "我经常参加以龙/拟兽为主题的线上社群（如 QQ、论坛、微博圈子）。",
-                type: "频率",
-                dimension: "social",
-                reverse: false
-            },
-            {
-                id: 12,
-                text: "我会主动在群里分享关于龙的创作、心得或资源。",
-                type: "频率",
-                dimension: "social",
-                reverse: false
-            },
-            {
-                id: 13,
-                text: "我会去线下的拟兽/二次元/龙主题活动或聚会。",
-                type: "频率",
-                dimension: "social",
-                reverse: false
-            },
-            {
-                id: 14,
-                text: "我会主动结识其他“龙爱好者”。",
-                type: "频率",
-                dimension: "social",
-                reverse: false
-            },
-            {
-                id: 15,
-                text: "当有人对龙文化持负面看法时，我会选择回避讨论。",
-                type: "频率",
-                dimension: "social",
-                reverse: true
-            },
-            {
-                id: 16,
-                text: "我经常收藏或关注龙题材的创作（插画、同人、动画等）。",
-                type: "频率",
-                dimension: "social",
-                reverse: false
-            },
-            {
-                id: 17,
-                text: "我会在社交头像或签名中使用龙或拟龙元素。",
-                type: "频率",
-                dimension: "social",
-                reverse: false
-            },
-            {
-                id: 18,
-                text: "我愿意为龙主题群体投入金钱支持（打赏、赞助、购买周边等）。",
-                type: "频率",
-                dimension: "social",
-                reverse: false
-            },
+        {
+          id: 11,
+          text: "我经常参加以龙/拟兽为主题的线上社群（如 QQ、论坛、微博圈子）。",
+          type: "频率",
+          dimension: "social",
+          reverse: false,
+        },
+        {
+          id: 12,
+          text: "我会主动在群里分享关于龙的创作、心得或资源。",
+          type: "频率",
+          dimension: "social",
+          reverse: false,
+        },
+        {
+          id: 13,
+          text: "我会去线下的拟兽/二次元/龙主题活动或聚会。",
+          type: "频率",
+          dimension: "social",
+          reverse: false,
+        },
+        {
+          id: 14,
+          text: "我会主动结识其他“龙爱好者”。",
+          type: "频率",
+          dimension: "social",
+          reverse: false,
+        },
+        {
+          id: 15,
+          text: "当有人对龙文化持负面看法时，我会选择回避讨论。",
+          type: "频率",
+          dimension: "social",
+          reverse: true,
+        },
+        {
+          id: 16,
+          text: "我经常收藏或关注龙题材的创作（插画、同人、动画等）。",
+          type: "频率",
+          dimension: "social",
+          reverse: false,
+        },
+        {
+          id: 17,
+          text: "我会在社交头像或签名中使用龙或拟龙元素。",
+          type: "频率",
+          dimension: "social",
+          reverse: false,
+        },
+        {
+          id: 18,
+          text: "我愿意为龙主题群体投入金钱支持（打赏、赞助、购买周边等）。",
+          type: "频率",
+          dimension: "social",
+          reverse: false,
+        },
 
-            {
-                id: 19,
-                text: "我会把自己想像成一个龙或拟龙角色（至少在幻想中）。",
-                type: "同意度",
-                dimension: "identity",
-                reverse: false
-            },
-            {
-                id: 20,
-                text: "我在梦里或幻想里经常出现龙类形象。",
-                type: "同意度",
-                dimension: "identity",
-                reverse: false
-            },
-            {
-                id: 21,
-                text: "我觉得龙形象能够表达我某些真实的情感或欲望。",
-                type: "同意度",
-                dimension: "identity",
-                reverse: false
-            },
-            {
-                id: 22,
-                text: "我在情感/身份上对“龙”有某种认同感。",
-                type: "同意度",
-                dimension: "identity",
-                reverse: false
-            },
-            {
-                id: 23,
-                text: "我愿意在角色扮演中扮演龙/拟龙角色。",
-                type: "同意度",
-                dimension: "identity",
-                reverse: false
-            },
-            {
-                id: 24,
-                text: "我曾因为龙的身份设定而感到心灵被抚慰或被理解。",
-                type: "同意度",
-                dimension: "identity",
-                reverse: false
-            },
-            {
-                id: 25,
-                text: "我容易将现实情绪投射到龙角色上（把龙当作情绪载体）。",
-                type: "同意度",
-                dimension: "identity",
-                reverse: false
-            },
-            {
-                id: 26,
-                text: "我愿意用“龙”的角度去解释自己的行为或偏好。",
-                type: "同意度",
-                dimension: "identity",
-                reverse: false
-            },
-            {
-                id: 27,
-                text: "我认为将自身或伴侣当成龙来想象是不自然或不舒服的。",
-                type: "同意度",
-                dimension: "identity",
-                reverse: true
-            },
-            {
-                id: 28,
-                text: "我觉得龙形象对我的自我认识或自我表达有正面影响。",
-                type: "同意度",
-                dimension: "identity",
-                reverse: false
-            },
+        {
+          id: 19,
+          text: "我会把自己想像成一个龙或拟龙角色（至少在幻想中）。",
+          type: "同意度",
+          dimension: "identity",
+          reverse: false,
+        },
+        {
+          id: 20,
+          text: "我在梦里或幻想里经常出现龙类形象。",
+          type: "同意度",
+          dimension: "identity",
+          reverse: false,
+        },
+        {
+          id: 21,
+          text: "我觉得龙形象能够表达我某些真实的情感或欲望。",
+          type: "同意度",
+          dimension: "identity",
+          reverse: false,
+        },
+        {
+          id: 22,
+          text: "我在情感/身份上对“龙”有某种认同感。",
+          type: "同意度",
+          dimension: "identity",
+          reverse: false,
+        },
+        {
+          id: 23,
+          text: "我愿意在角色扮演中扮演龙/拟龙角色。",
+          type: "同意度",
+          dimension: "identity",
+          reverse: false,
+        },
+        {
+          id: 24,
+          text: "我曾因为龙的身份设定而感到心灵被抚慰或被理解。",
+          type: "同意度",
+          dimension: "identity",
+          reverse: false,
+        },
+        {
+          id: 25,
+          text: "我容易将现实情绪投射到龙角色上（把龙当作情绪载体）。",
+          type: "同意度",
+          dimension: "identity",
+          reverse: false,
+        },
+        {
+          id: 26,
+          text: "我愿意用“龙”的角度去解释自己的行为或偏好。",
+          type: "同意度",
+          dimension: "identity",
+          reverse: false,
+        },
+        {
+          id: 27,
+          text: "我认为将自身或伴侣当成龙来想象是不自然或不舒服的。",
+          type: "同意度",
+          dimension: "identity",
+          reverse: true,
+        },
+        {
+          id: 28,
+          text: "我觉得龙形象对我的自我认识或自我表达有正面影响。",
+          type: "同意度",
+          dimension: "identity",
+          reverse: false,
+        },
 
-            {
-                id: 29,
-                text: "我拥有多件以龙为主题的周边或收藏品（模型、布偶、挂件等）。",
-                type: "频率",
-                dimension: "collection",
-                reverse: false
-            },
-            {
-                id: 30,
-                text: "我会优先购买或收藏龙题材的艺术品或商品。",
-                type: "频率",
-                dimension: "collection",
-                reverse: false
-            },
-            {
-                id: 31,
-                text: "我经常观看或查找有关龙/拟兽文化的资料（绘画教程、设定文章等）。",
-                type: "频率",
-                dimension: "collection",
-                reverse: false
-            },
-            {
-                id: 32,
-                text: "我订阅过至少一个以龙为主题的内容（艺术家、媒体频道等）。",
-                type: "频率",
-                dimension: "collection",
-                reverse: false
-            },
-            {
-                id: 33,
-                text: "我会为了龙题材的商品而等待或打破预算购买。",
-                type: "频率",
-                dimension: "collection",
-                reverse: false
-            },
-            {
-                id: 34,
-                text: "我会分享或转发龙题材的媒体内容给朋友或社群。",
-                type: "频率",
-                dimension: "collection",
-                reverse: false
-            },
+        {
+          id: 29,
+          text: "我拥有多件以龙为主题的周边或收藏品（模型、布偶、挂件等）。",
+          type: "频率",
+          dimension: "collection",
+          reverse: false,
+        },
+        {
+          id: 30,
+          text: "我会优先购买或收藏龙题材的艺术品或商品。",
+          type: "频率",
+          dimension: "collection",
+          reverse: false,
+        },
+        {
+          id: 31,
+          text: "我经常观看或查找有关龙/拟兽文化的资料（绘画教程、设定文章等）。",
+          type: "频率",
+          dimension: "collection",
+          reverse: false,
+        },
+        {
+          id: 32,
+          text: "我订阅过至少一个以龙为主题的内容（艺术家、媒体频道等）。",
+          type: "频率",
+          dimension: "collection",
+          reverse: false,
+        },
+        {
+          id: 33,
+          text: "我会为了龙题材的商品而等待或打破预算购买。",
+          type: "频率",
+          dimension: "collection",
+          reverse: false,
+        },
+        {
+          id: 34,
+          text: "我会分享或转发龙题材的媒体内容给朋友或社群。",
+          type: "频率",
+          dimension: "collection",
+          reverse: false,
+        },
 
-            {
-                id: 35,
-                text: "我喜欢在日常装饰中加入龙元素（壁纸、贴纸、家居等）。",
-                type: "频率",
-                dimension: "daily",
-                reverse: false
-            },
-            {
-                id: 36,
-                text: "我会在节日或特定场合穿带有龙元素的服装或配饰。",
-                type: "频率",
-                dimension: "daily",
-                reverse: false
-            },
-            {
-                id: 37,
-                text: "我会将龙元素融入工作/学习相关的便签或个人文档中。",
-                type: "频率",
-                dimension: "daily",
-                reverse: false
-            },
-            {
-                id: 38,
-                text: "我会以龙主题来取代或命名我的虚拟物品（例如角色名、宠物名）。",
-                type: "频率",
-                dimension: "daily",
-                reverse: false
-            },
-            {
-                id: 39,
-                text: "我在日常谈话中经常开玩笑或引用龙文化梗。",
-                type: "频率",
-                dimension: "daily",
-                reverse: false
-            },
-            {
-                id: 40,
-                text: "我会专门收藏与龙有关的音乐/配乐以便听取（例如角色主题曲）。",
-                type: "频率",
-                dimension: "daily",
-                reverse: false
-            },
-            {
-                id: 41,
-                text: "我常常尽量在生活中隐藏自己对龙文化的偏好，以免被误解。",
-                type: "频率",
-                dimension: "daily",
-                reverse: true
-            },
-            {
-                id: 42,
-                text: "我会在个人资料（如游戏、论坛）优先使用龙相关的用户名/头像。",
-                type: "频率",
-                dimension: "daily",
-                reverse: false
-            },
+        {
+          id: 35,
+          text: "我喜欢在日常装饰中加入龙元素（壁纸、贴纸、家居等）。",
+          type: "频率",
+          dimension: "daily",
+          reverse: false,
+        },
+        {
+          id: 36,
+          text: "我会在节日或特定场合穿带有龙元素的服装或配饰。",
+          type: "频率",
+          dimension: "daily",
+          reverse: false,
+        },
+        {
+          id: 37,
+          text: "我会将龙元素融入工作/学习相关的便签或个人文档中。",
+          type: "频率",
+          dimension: "daily",
+          reverse: false,
+        },
+        {
+          id: 38,
+          text: "我会以龙主题来取代或命名我的虚拟物品（例如角色名、宠物名）。",
+          type: "频率",
+          dimension: "daily",
+          reverse: false,
+        },
+        {
+          id: 39,
+          text: "我在日常谈话中经常开玩笑或引用龙文化梗。",
+          type: "频率",
+          dimension: "daily",
+          reverse: false,
+        },
+        {
+          id: 40,
+          text: "我会专门收藏与龙有关的音乐/配乐以便听取（例如角色主题曲）。",
+          type: "频率",
+          dimension: "daily",
+          reverse: false,
+        },
+        {
+          id: 41,
+          text: "我常常尽量在生活中隐藏自己对龙文化的偏好，以免被误解。",
+          type: "频率",
+          dimension: "daily",
+          reverse: true,
+        },
+        {
+          id: 42,
+          text: "我会在个人资料（如游戏、论坛）优先使用龙相关的用户名/头像。",
+          type: "频率",
+          dimension: "daily",
+          reverse: false,
+        },
 
-            {
-                id: 43,
-                text: "我会被以拟龙化为特征的角色感到强烈吸引（情感上或审美上）。",
-                type: "同意度",
-                dimension: "emotion",
-                reverse: false
-            },
-            {
-                id: 44,
-                text: "我在想象浪漫/亲密情境时，会把龙形象作为参与者之一。",
-                type: "同意度",
-                dimension: "emotion",
-                reverse: false
-            },
-            {
-                id: 45,
-                text: "我愿意与同样喜欢龙的伴侣建立更亲密的关系。",
-                type: "同意度",
-                dimension: "emotion",
-                reverse: false
-            },
-            {
-                id: 46,
-                text: "我觉得在伴侣/朋友间讨论龙文化会增进亲密感。",
-                type: "同意度",
-                dimension: "emotion",
-                reverse: false
-            },
-            {
-                id: 47,
-                text: "如果伴侣不理解或排斥龙文化，我会立刻结束关系。",
-                type: "同意度",
-                dimension: "emotion",
-                reverse: true
-            },
-            {
-                id: 48,
-                text: "我曾因龙题材产生过浪漫或情感上的幻想，并感到满足。",
-                type: "同意度",
-                dimension: "emotion",
-                reverse: false
-            },
-            {
-                id: 49,
-                text: "我愿意在合适的情境下把龙形象引入亲密交流（例如情书、角色扮演）。",
-                type: "同意度",
-                dimension: "emotion",
-                reverse: false
-            },
-            {
-                id: 50,
-                text: "我认为对龙的偏好是我情感生活中的重要组成部分。",
-                type: "同意度",
-                dimension: "emotion",
-                reverse: false
-            }
-        ];
+        {
+          id: 43,
+          text: "我会被以拟龙化为特征的角色感到强烈吸引（情感上或审美上）。",
+          type: "同意度",
+          dimension: "emotion",
+          reverse: false,
+        },
+        {
+          id: 44,
+          text: "我在想象浪漫/亲密情境时，会把龙形象作为参与者之一。",
+          type: "同意度",
+          dimension: "emotion",
+          reverse: false,
+        },
+        {
+          id: 45,
+          text: "我愿意与同样喜欢龙的伴侣建立更亲密的关系。",
+          type: "同意度",
+          dimension: "emotion",
+          reverse: false,
+        },
+        {
+          id: 46,
+          text: "我觉得在伴侣/朋友间讨论龙文化会增进亲密感。",
+          type: "同意度",
+          dimension: "emotion",
+          reverse: false,
+        },
+        {
+          id: 47,
+          text: "如果伴侣不理解或排斥龙文化，我会立刻结束关系。",
+          type: "同意度",
+          dimension: "emotion",
+          reverse: true,
+        },
+        {
+          id: 48,
+          text: "我曾因龙题材产生过浪漫或情感上的幻想，并感到满足。",
+          type: "同意度",
+          dimension: "emotion",
+          reverse: false,
+        },
+        {
+          id: 49,
+          text: "我愿意在合适的情境下把龙形象引入亲密交流（例如情书、角色扮演）。",
+          type: "同意度",
+          dimension: "emotion",
+          reverse: false,
+        },
+        {
+          id: 50,
+          text: "我认为对龙的偏好是我情感生活中的重要组成部分。",
+          type: "同意度",
+          dimension: "emotion",
+          reverse: false,
+        },
+      ];
 
-        const dimensionCounts = {
-            creation: 10,
-            social: 8,
-            identity: 10,
-            collection: 6,
-            daily: 8,
-            emotion: 8
-        };
+      const dimensionCounts = {
+        creation: 10,
+        social: 8,
+        identity: 10,
+        collection: 6,
+        daily: 8,
+        emotion: 8,
+      };
 
-        const interpretations = [
-            {
-                range: [0, 19],
-                category: "几乎无龙性恋倾向",
-                text: "对龙/拟龙题材兴趣非常低，生活中不常接触或认同相关元素。若这是你真实的偏好，无需调整；若你有探索兴趣，可尝试观看/接触入门作品，慢慢体验是否有共鸣。"
-            },
-            {
-                range: [20, 39],
-                category: "低度倾向",
-                text: "有零星兴趣，可能偶尔被龙题材吸引但不深入投入。如果希望更了解，可尝试参加线上社群或进行小规模创作；若你对被身边人理解有顾虑，可先在匿名/小圈子尝试。"
-            },
-            {
-                range: [40, 59],
-                category: "中等倾向",
-                text: "龙题材在你的生活中占有一定位置——可能在创作、收藏或社交中经常出现，但并非主导。可评估是否希望将兴趣升级为更显性（如公开创作、参加活动）；注意与现实人际关系的平衡。"
-            },
-            {
-                range: [60, 79],
-                category: "高度倾向",
-                text: "你在多个生活领域体现出对龙的偏好（创作、收藏、身份幻想等）。龙元素对你的身份表达或情感体验有明显影响。考虑建立或拓展支持性的社群关系，注意界定幻想与现实的界限；在亲密关系中，逐步沟通自己的偏好和边界。"
-            },
-            {
-                range: [80, 100],
-                category: "极高 / “超级龙性恋”",
-                text: "龙元素深度融入你的生活与心理世界（创作主轴、社交身份、情感/幻想）。你可能把龙视为重要的自我表达载体。这是高度投入的状态，若你感到幸福且人际关系健康，则无需改变；若出现社交功能下降、情绪困扰或和他人的重大冲突，建议寻求信任的朋友、团体或专业咨询帮助来协调内外需求。"
-            }
-        ];
+      const interpretations = [
+        {
+          range: [0, 19],
+          category: "几乎无龙性恋倾向",
+          text: "对龙/拟龙题材兴趣非常低，生活中不常接触或认同相关元素。若这是你真实的偏好，无需调整；若你有探索兴趣，可尝试观看/接触入门作品，慢慢体验是否有共鸣。",
+        },
+        {
+          range: [20, 39],
+          category: "低度倾向",
+          text: "有零星兴趣，可能偶尔被龙题材吸引但不深入投入。如果希望更了解，可尝试参加线上社群或进行小规模创作；若你对被身边人理解有顾虑，可先在匿名/小圈子尝试。",
+        },
+        {
+          range: [40, 59],
+          category: "中等倾向",
+          text: "龙题材在你的生活中占有一定位置——可能在创作、收藏或社交中经常出现，但并非主导。可评估是否希望将兴趣升级为更显性（如公开创作、参加活动）；注意与现实人际关系的平衡。",
+        },
+        {
+          range: [60, 79],
+          category: "高度倾向",
+          text: "你在多个生活领域体现出对龙的偏好（创作、收藏、身份幻想等）。龙元素对你的身份表达或情感体验有明显影响。考虑建立或拓展支持性的社群关系，注意界定幻想与现实的界限；在亲密关系中，逐步沟通自己的偏好和边界。",
+        },
+        {
+          range: [80, 100],
+          category: "极高 / “超级龙性恋”",
+          text: "龙元素深度融入你的生活与心理世界（创作主轴、社交身份、情感/幻想）。你可能把龙视为重要的自我表达载体。这是高度投入的状态，若你感到幸福且人际关系健康，则无需改变；若出现社交功能下降、情绪困扰或和他人的重大冲突，建议寻求信任的朋友、团体或专业咨询帮助来协调内外需求。",
+        },
+      ];
 
-        const introSection = document.getElementById('intro');
-        const questionsSection = document.getElementById('questions');
-        const resultsSection = document.getElementById('results');
-        const startBtn = document.getElementById('start-btn');
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const restartBtn = document.getElementById('restart-btn');
-        const questionNumber = document.getElementById('question-number');
-        const questionType = document.getElementById('question-type');
-        const questionText = document.getElementById('question-text');
-        const optionsContainer = document.getElementById('options');
-        const progressBar = document.getElementById('progress-bar');
-        const mobileProgressBar = document.getElementById('mobile-progress-bar');
+      const introSection = document.getElementById("intro");
+      const questionsSection = document.getElementById("questions");
+      const resultsSection = document.getElementById("results");
+      const startBtn = document.getElementById("start-btn");
+      const prevBtn = document.getElementById("prev-btn");
+      const nextBtn = document.getElementById("next-btn");
+      const restartBtn = document.getElementById("restart-btn");
+      const questionNumber = document.getElementById("question-number");
+      const questionType = document.getElementById("question-type");
+      const questionText = document.getElementById("question-text");
+      const optionsContainer = document.getElementById("options");
+      const progressBar = document.getElementById("progress-bar");
+      const mobileProgressBar = document.getElementById("mobile-progress-bar");
 
-        const finalScoreEl = document.getElementById('final-score');
-        const scoreCategoryEl = document.getElementById('score-category');
-        const scoreInterpretationEl = document.getElementById('score-interpretation');
+      const finalScoreEl = document.getElementById("final-score");
+      const scoreCategoryEl = document.getElementById("score-category");
+      const scoreInterpretationEl = document.getElementById(
+        "score-interpretation"
+      );
 
-        const dimensionElements = {
-            creation: {
-                score: document.getElementById('creation-score'),
-                bar: document.getElementById('creation-bar')
-            },
-            social: {
-                score: document.getElementById('social-score'),
-                bar: document.getElementById('social-bar')
-            },
-            identity: {
-                score: document.getElementById('identity-score'),
-                bar: document.getElementById('identity-bar')
-            },
-            collection: {
-                score: document.getElementById('collection-score'),
-                bar: document.getElementById('collection-bar')
-            },
-            daily: {
-                score: document.getElementById('daily-score'),
-                bar: document.getElementById('daily-bar')
-            },
-            emotion: {
-                score: document.getElementById('emotion-score'),
-                bar: document.getElementById('emotion-bar')
-            }
-        };
+      const dimensionElements = {
+        creation: {
+          score: document.getElementById("creation-score"),
+          bar: document.getElementById("creation-bar"),
+        },
+        social: {
+          score: document.getElementById("social-score"),
+          bar: document.getElementById("social-bar"),
+        },
+        identity: {
+          score: document.getElementById("identity-score"),
+          bar: document.getElementById("identity-bar"),
+        },
+        collection: {
+          score: document.getElementById("collection-score"),
+          bar: document.getElementById("collection-bar"),
+        },
+        daily: {
+          score: document.getElementById("daily-score"),
+          bar: document.getElementById("daily-bar"),
+        },
+        emotion: {
+          score: document.getElementById("emotion-score"),
+          bar: document.getElementById("emotion-bar"),
+        },
+      };
 
-        let shuffledQuestions = [];
-        let currentQuestionIndex = 0;
-        let answers = {};
-        let dimensionScores = {
-            creation: 0,
-            social: 0,
-            identity: 0,
-            collection: 0,
-            daily: 0,
-            emotion: 0
-        };
+      let shuffledQuestions = [];
+      let currentQuestionIndex = 0;
+      let answers = {};
+      let dimensionScores = {
+        creation: 0,
+        social: 0,
+        identity: 0,
+        collection: 0,
+        daily: 0,
+        emotion: 0,
+      };
 
-        function shuffleArray(array) {
-            const newArray = [...array];
-            for (let i = newArray.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-            }
-            return newArray;
+      function shuffleArray(array) {
+        const newArray = [...array];
+        for (let i = newArray.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+        }
+        return newArray;
+      }
+
+      function displayCurrentQuestion() {
+        if (currentQuestionIndex >= shuffledQuestions.length) {
+          calculateResults();
+          return;
         }
 
-        function displayCurrentQuestion() {
-            if (currentQuestionIndex >= shuffledQuestions.length) {
-                calculateResults();
-                return;
-            }
+        const question = shuffledQuestions[currentQuestionIndex];
+        questionNumber.textContent = `第 ${currentQuestionIndex + 1}/${
+          shuffledQuestions.length
+        } 题`;
+        questionType.textContent = `【${question.type}】`;
+        questionText.textContent = question.text;
 
-            const question = shuffledQuestions[currentQuestionIndex];
-            questionNumber.textContent = `第 ${currentQuestionIndex + 1}/${shuffledQuestions.length} 题`;
-            questionType.textContent = `【${question.type}】`;
-            questionText.textContent = question.text;
-            
-            // 更新进度条
-            const progress = ((currentQuestionIndex) / shuffledQuestions.length) * 100;
-            progressBar.style.width = `${progress}%`;
-            mobileProgressBar.style.width = `${progress}%`;
+        // 更新进度条
+        const progress =
+          (currentQuestionIndex / shuffledQuestions.length) * 100;
+        progressBar.style.width = `${progress}%`;
+        mobileProgressBar.style.width = `${progress}%`;
 
-            prevBtn.disabled = currentQuestionIndex === 0;
+        prevBtn.disabled = currentQuestionIndex === 0;
 
-            optionsContainer.innerHTML = '';
-            let options = [];
-            
-            if (question.type === '同意度') {
-                options = [
-                    { value: 1, text: '非常不同意' },
-                    { value: 2, text: '不同意' },
-                    { value: 3, text: '中立' },
-                    { value: 4, text: '同意' },
-                    { value: 5, text: '非常同意' }
-                ];
-            } else if (question.type === '频率') {
-                options = [
-                    { value: 1, text: '从不' },
-                    { value: 2, text: '很少' },
-                    { value: 3, text: '有时' },
-                    { value: 4, text: '经常' },
-                    { value: 5, text: '总是' }
-                ];
-            }
+        optionsContainer.innerHTML = "";
+        let options = [];
 
-            options.forEach(option => {
-                const optionDiv = document.createElement('div');
-                optionDiv.className = 'relative';
-                
-                const inputId = `option-${question.id}-${option.value}`;
-                optionDiv.innerHTML = `
-                    <input type="radio" id="${inputId}" name="question-${question.id}" value="${option.value}" 
-                           class="peer sr-only" ${answers[question.id] == option.value ? 'checked' : ''}>
+        if (question.type === "同意度") {
+          options = [
+            { value: 1, text: "非常不同意" },
+            { value: 2, text: "不同意" },
+            { value: 3, text: "中立" },
+            { value: 4, text: "同意" },
+            { value: 5, text: "非常同意" },
+          ];
+        } else if (question.type === "频率") {
+          options = [
+            { value: 1, text: "从不" },
+            { value: 2, text: "很少" },
+            { value: 3, text: "有时" },
+            { value: 4, text: "经常" },
+            { value: 5, text: "总是" },
+          ];
+        }
+
+        options.forEach((option) => {
+          const optionDiv = document.createElement("div");
+          optionDiv.className = "relative";
+
+          const inputId = `option-${question.id}-${option.value}`;
+          optionDiv.innerHTML = `
+                    <input type="radio" id="${inputId}" name="question-${
+            question.id
+          }" value="${option.value}" 
+                           class="peer sr-only" ${
+                             answers[question.id] == option.value
+                               ? "checked"
+                               : ""
+                           }>
                     <label for="${inputId}" class="block w-full p-4 border border-gray-300 rounded-lg cursor-pointer 
                            hover:bg-primary/5 transition peer-checked:border-accent peer-checked:bg-primary/10
                            peer-checked:before:content-['✓'] peer-checked:before:absolute peer-checked:before:right-4
@@ -729,108 +841,109 @@
                     </label>
                 `;
 
-                optionsContainer.appendChild(optionDiv);
+          optionsContainer.appendChild(optionDiv);
 
-                const input = document.getElementById(inputId);
-                input.addEventListener('change', () => {
-                    answers[question.id] = option.value;
-                    setTimeout(() => {
-                        currentQuestionIndex++;
-                        displayCurrentQuestion();
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }, 50);
-                });
-            });
+          const input = document.getElementById(inputId);
+          input.addEventListener("change", () => {
+            answers[question.id] = option.value;
+            setTimeout(() => {
+              currentQuestionIndex++;
+              displayCurrentQuestion();
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }, 50);
+          });
+        });
+      }
+
+      function calculateResults() {
+        let totalScore = 0;
+
+        shuffledQuestions.forEach((question) => {
+          let score = parseInt(answers[question.id]);
+
+          if (question.reverse) {
+            score = 6 - score;
+          }
+
+          totalScore += score;
+          dimensionScores[question.dimension] += score;
+        });
+
+        const finalScore = Math.round(((totalScore - 50) / 200) * 100);
+
+        for (const dimension in dimensionScores) {
+          const count = dimensionCounts[dimension];
+          const dimensionScore = Math.round(
+            ((dimensionScores[dimension] - count) / (count * 4)) * 100
+          );
+          dimensionScores[dimension] = dimensionScore;
         }
 
-        function calculateResults() {
-            let totalScore = 0;
+        displayResults(finalScore);
+      }
 
-            shuffledQuestions.forEach(question => {
-                let score = parseInt(answers[question.id]);
+      function displayResults(score) {
+        questionsSection.classList.add("hidden");
+        resultsSection.classList.remove("hidden");
 
-                if (question.reverse) {
-                    score = 6 - score;
-                }
-                
-                totalScore += score;
-                dimensionScores[question.dimension] += score;
-            });
+        finalScoreEl.textContent = score;
 
-            const finalScore = Math.round(((totalScore - 50) / 200) * 100);
+        let interpretation = interpretations.find(
+          (item) => score >= item.range[0] && score <= item.range[1]
+        );
 
-            for (const dimension in dimensionScores) {
-                const count = dimensionCounts[dimension];
-                const dimensionScore = Math.round(((dimensionScores[dimension] - count) / (count * 4)) * 100);
-                dimensionScores[dimension] = dimensionScore;
-            }
-
-            displayResults(finalScore);
+        if (interpretation) {
+          scoreCategoryEl.textContent = interpretation.category;
+          scoreInterpretationEl.textContent = interpretation.text;
         }
 
-        function displayResults(score) {
-            questionsSection.classList.add('hidden');
-            resultsSection.classList.remove('hidden');
-
-            finalScoreEl.textContent = score;
-
-            let interpretation = interpretations.find(item => 
-                score >= item.range[0] && score <= item.range[1]
-            );
-
-            if (interpretation) {
-                scoreCategoryEl.textContent = interpretation.category;
-                scoreInterpretationEl.textContent = interpretation.text;
-            }
-
-            for (const dimension in dimensionScores) {
-                const score = dimensionScores[dimension];
-                dimensionElements[dimension].score.textContent = `${score}/100`;
-                dimensionElements[dimension].bar.style.width = `${score}%`;
-            }
+        for (const dimension in dimensionScores) {
+          const score = dimensionScores[dimension];
+          dimensionElements[dimension].score.textContent = `${score}/100`;
+          dimensionElements[dimension].bar.style.width = `${score}%`;
         }
+      }
 
-        startBtn.addEventListener('click', () => {
-            shuffledQuestions = shuffleArray(questions);
+      startBtn.addEventListener("click", () => {
+        shuffledQuestions = shuffleArray(questions);
 
-            currentQuestionIndex = 0;
-            answers = {};
-            dimensionScores = {
-                creation: 0,
-                social: 0,
-                identity: 0,
-                collection: 0,
-                daily: 0,
-                emotion: 0
-            };
+        currentQuestionIndex = 0;
+        answers = {};
+        dimensionScores = {
+          creation: 0,
+          social: 0,
+          identity: 0,
+          collection: 0,
+          daily: 0,
+          emotion: 0,
+        };
 
-            introSection.classList.add('hidden');
-            questionsSection.classList.remove('hidden');
+        introSection.classList.add("hidden");
+        questionsSection.classList.remove("hidden");
 
-            displayCurrentQuestion();
-        });
+        displayCurrentQuestion();
+      });
 
-        prevBtn.addEventListener('click', () => {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                displayCurrentQuestion();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        });
+      prevBtn.addEventListener("click", () => {
+        if (currentQuestionIndex > 0) {
+          currentQuestionIndex--;
+          displayCurrentQuestion();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      });
 
-        nextBtn.addEventListener('click', () => {
-            if (answers[shuffledQuestions[currentQuestionIndex].id]) {
-                currentQuestionIndex++;
-                displayCurrentQuestion();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        });
+      nextBtn.addEventListener("click", () => {
+        if (answers[shuffledQuestions[currentQuestionIndex].id]) {
+          currentQuestionIndex++;
+          displayCurrentQuestion();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      });
 
-        restartBtn.addEventListener('click', () => {
-            resultsSection.classList.add('hidden');
-            introSection.classList.remove('hidden');
-        });
+      restartBtn.addEventListener("click", () => {
+        resultsSection.classList.add("hidden");
+        introSection.classList.remove("hidden");
+      });
     </script>
-
-
-</body></html>
+  </body>
+</html>
